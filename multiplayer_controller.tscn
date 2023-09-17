@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://chdukmmwul13m"]
 
-[ext_resource type="Script" path="res://multiplayer_controller.gd" id="1_plqwc"]
+[ext_resource type="Script" path="res://multiplayer_controller.gd" id="1_aonku"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -9,29 +9,46 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_plqwc")
+script = ExtResource("1_aonku")
 
 [node name="HostButton" type="Button" parent="."]
 layout_mode = 0
 offset_left = 304.0
-offset_top = 324.0
+offset_top = 364.0
 offset_right = 442.0
-offset_bottom = 355.0
+offset_bottom = 395.0
 text = "Host"
 
 [node name="JoinButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 488.0
-offset_top = 324.0
+offset_top = 364.0
 offset_right = 626.0
-offset_bottom = 355.0
+offset_bottom = 395.0
 text = "Join"
 
 [node name="StartButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 671.0
-offset_top = 324.0
+offset_top = 364.0
 offset_right = 809.0
-offset_bottom = 355.0
+offset_bottom = 395.0
 text = "Start"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 304.0
+offset_right = 351.0
+offset_bottom = 330.0
+text = "Name"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 387.0
+offset_top = 302.0
+offset_right = 809.0
+offset_bottom = 333.0
 
 [connection signal="button_down" from="HostButton" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="JoinButton" to="." method="_on_join_button_down"]

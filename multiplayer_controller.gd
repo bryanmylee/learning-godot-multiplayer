@@ -1,5 +1,7 @@
 extends Control
 
+const SERVER_ID = 1
+
 @export var Address = "127.0.0.1"
 @export var Port = 8910
 
@@ -26,6 +28,20 @@ func on_player_disconnected(id: int):
 
 func on_connected_to_server():
 	print("Connected to server!")
+	send_player_information.rpc_id(SERVER_ID, $LineEdit.text, multiplayer.get_unique_id())
+
+@rpc("reliable", "any_peer")
+func send_player_information(name: String, id: int):
+	if not GameManager.players.has(id):
+		GameManager.players[id] = {
+			"name": name,
+			"id": id,
+			"score": 0,
+		}
+	if multiplayer.is_server():
+		for i in GameManager.players:
+			send_player_information.rpc(GameManager.players[i].name, i)
+
 
 func on_connection_failed():
 	print("Couldn't connect to server...")
@@ -50,14 +66,13 @@ func _on_host_button_down():
 	# This is only for the player that is hosting the game.
 	multiplayer.set_multiplayer_peer(peer)
 	print("Waiting for players...")
+	send_player_information($LineEdit.text, multiplayer.get_unique_id())
 
 
 func _on_join_button_down():
 	peer = ENetMultiplayerPeer.new()
 	peer.create_client(Address, Port)
-	
 	peer.get_host().compress(compression)
-	
 	multiplayer.set_multiplayer_peer(peer)
 
 
@@ -66,7 +81,7 @@ func _on_start_button_down():
 	start_game.rpc() # .rpc() will call the function as an RPC
 	# start_game.rpc_id(1) # .rpc_id() will call the function on a specific client.
 
-@rpc("reliable", "any_peer", "call_local")
+@rpc("reliable", "any_peer", "call_local") # instructs the call to be made locally too
 func start_game():
 	var scene = load("res://test_level.tscn").instantiate()
 	get_tree().root.add_child(scene)
