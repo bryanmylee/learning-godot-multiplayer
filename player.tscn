@@ -120,11 +120,11 @@ animations = [{
 size = Vector2(15, 19)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mxxlq"]
-properties/0/path = NodePath(".:position")
+properties/0/path = NodePath(".:sync_position")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("GunRotation:rotation")
+properties/1/path = NodePath(".:sync_rotation")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
@@ -160,4 +160,6 @@ texture = ExtResource("3_5gobf")
 position = Vector2(65, -2.5)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.05
+delta_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_mxxlq")

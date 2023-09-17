@@ -6,18 +6,19 @@ const JUMP_VELOCITY = -400.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var syncPos := Vector2(0,0)
-var syncRot := 0
+
+var sync_position := Vector2(0,0)
+var sync_rotation := 0
 
 # @export exposes an interface to be injected into this script via the Scene Editor.
 @export var bullet : PackedScene
-
 
 func _ready():
 	$MultiplayerSynchronizer.set_multiplayer_authority(str(self.name).to_int())
 
 func _physics_process(delta):
 	if $MultiplayerSynchronizer.get_multiplayer_authority() != multiplayer.get_unique_id():
+		sync_process(delta)
 		return
 	
 	# Add the gravity.
@@ -29,8 +30,8 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	syncPos = global_position
-	syncRot = rotation_degrees
+	sync_position = global_position
+	sync_rotation = $GunRotation.rotation_degrees
 
 	if Input.is_action_just_pressed("fire"):
 		var b := bullet.instantiate()
@@ -47,3 +48,6 @@ func _physics_process(delta):
 #
 	move_and_slide()
  
+func sync_process(delta):
+	global_position = global_position.lerp(sync_position, .5)
+	$GunRotation.rotation_degrees = lerpf($GunRotation.rotation_degrees, sync_rotation, .5)
