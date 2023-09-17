@@ -12,7 +12,14 @@ var syncRot := 0
 # @export exposes an interface to be injected into this script via the Scene Editor.
 @export var bullet : PackedScene
 
+
+func _ready():
+	$MultiplayerSynchronizer.set_multiplayer_authority(str(self.name).to_int())
+
 func _physics_process(delta):
+	if $MultiplayerSynchronizer.get_multiplayer_authority() != multiplayer.get_unique_id():
+		return
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta

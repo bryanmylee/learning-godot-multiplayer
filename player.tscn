@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cwld7ti0ms68j"]
+[gd_scene load_steps=22 format=3 uid="uid://cwld7ti0ms68j"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_delt5"]
 [ext_resource type="Texture2D" uid="uid://dld54qw3mao0w" path="res://char_spritesheet.png" id="2_16lmb"]
@@ -119,6 +119,16 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sioo3"]
 size = Vector2(15, 19)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mxxlq"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("GunRotation:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(0, -1)
 script = ExtResource("1_delt5")
@@ -148,3 +158,6 @@ texture = ExtResource("3_5gobf")
 
 [node name="BulletSpawn" type="Node2D" parent="GunRotation"]
 position = Vector2(65, -2.5)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mxxlq")

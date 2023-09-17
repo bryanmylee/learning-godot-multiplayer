@@ -7,6 +7,7 @@ func _ready():
 	var index = 0
 	for i in GameManager.players:
 		var curr_player = player.instantiate()
+		curr_player.name = str(GameManager.players[i].id)
 		add_child(curr_player)
 		for spawn in get_tree().get_nodes_in_group("PlayerSpawnPoint"):
 			if spawn.name == str(index):
