@@ -28,6 +28,12 @@ func on_player_connected(id: int):
 
 func on_player_disconnected(id: int):
 	print("Player disconnected " + str(id))
+	GameManager.players.erase(id)
+	var players = get_tree().get_nodes_in_group("Players")
+	for player in players:
+		if player.name == str(id):
+			player.queue_free()
+	
 
 func on_connected_to_server():
 	print("Connected to server!")
