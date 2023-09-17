@@ -18,6 +18,9 @@ func _ready():
 	multiplayer.connected_to_server.connect(on_connected_to_server)
 	# called on server when a connection fails.
 	multiplayer.connection_failed.connect(on_connection_failed)
+	
+	if "--server" in OS.get_cmdline_args():
+		host_game()
 
 
 func on_player_connected(id: int):
@@ -47,12 +50,7 @@ func on_connection_failed():
 	print("Couldn't connect to server...")
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
-func _on_host_button_down():
+func host_game():
 	peer = ENetMultiplayerPeer.new()
 	
 	var error = peer.create_server(Port, 32)
@@ -66,6 +64,10 @@ func _on_host_button_down():
 	# This is only for the player that is hosting the game.
 	multiplayer.set_multiplayer_peer(peer)
 	print("Waiting for players...")
+
+
+func _on_host_button_down():
+	host_game()
 	send_player_information($LineEdit.text, multiplayer.get_unique_id())
 
 
