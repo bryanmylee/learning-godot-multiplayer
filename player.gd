@@ -34,10 +34,7 @@ func _physics_process(delta):
 	sync_rotation = $GunRotation.rotation_degrees
 
 	if Input.is_action_just_pressed("fire"):
-		var b := bullet.instantiate()
-		b.global_position = $GunRotation/BulletSpawn.global_position
-		b.rotation_degrees = $GunRotation.rotation_degrees
-		get_tree().root.add_child(b)
+		fire_bullet.rpc()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
@@ -47,6 +44,13 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 #
 	move_and_slide()
+
+@rpc("any_peer", "call_local")
+func fire_bullet():
+	var b := bullet.instantiate()
+	b.global_position = $GunRotation/BulletSpawn.global_position
+	b.rotation_degrees = $GunRotation.rotation_degrees
+	get_tree().root.add_child(b)
  
 func sync_process(delta):
 	global_position = global_position.lerp(sync_position, .5)
